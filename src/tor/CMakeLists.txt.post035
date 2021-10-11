@@ -11,7 +11,36 @@ find_package(EVENT2 REQUIRED)
 find_package(GLIB REQUIRED)
 find_package(LibLZMA)
 
-include_directories(AFTER ${RT_INCLUDES} ${DL_INCLUDES} ${M_INCLUDES} ${GLIB_INCLUDES} ${EVENT2_INCLUDES} ${OPENSSL_INCLUDES} ${LIBLZMA_INCLUDE_DIRS} ${TOR_INCLUDES})
+if(USE_HEAPTRACK)
+	find_library(HEAPTRACK_LIBRARY
+		NAMES heaptrack
+		PATHS
+			~/tornettools_manager/dependencies
+			/usr/lib
+			/usr/lib64
+			/usr/local/lib
+			/usr/local/lib64
+		PATH_SUFFIXES
+			heaptrack/build/lib/heaptrack
+			build/lib/heaptrack
+	)
+	find_path(HEAPTRACK_API_HEADER
+		NAMES libheaptrack.h
+		PATHS
+			~/tornettools_manager/dependencies
+			/usr/lib
+			/usr/lib64
+			/usr/local/lib
+			/usr/local/lib64
+		PATH_SUFFIXES
+			heaptrack
+			heaptrack/src/track
+	)
+add_definitions(-DUSE_HEAPTRACK)
+endif()
+
+include_directories(AFTER ${RT_INCLUDES} ${DL_INCLUDES} ${M_INCLUDES} ${GLIB_INCLUDES} ${EVENT2_INCLUDES} ${OPENSSL_INCLUDES} ${LIBLZMA_INCLUDE_DIRS} ${TOR_INCLUDES} ${HEAPTRACK_API_HEADER})
+
 
 ## import shadow libs
 #INCLUDE(${CMAKE_INSTALL_PREFIX}/share/shadow/shadow-externals.cmake)
@@ -139,7 +168,7 @@ endif()
 
 target_link_libraries(shadow-plugin-tor
     ${TOR_LIBRARIES} ${GLIB_LIBRARIES} ${EVENT2_LIBRARIES} ${OPENSSL_LIBRARIES} 
-    ${LIBLZMA_LIBRARIES} ${ZLIB_LIBRARIES} ${M_LIBRARIES} ${RT_LIBRARIES} ${DL_LIBRARIES} -lpthread)
+    ${LIBLZMA_LIBRARIES} ${ZLIB_LIBRARIES} ${M_LIBRARIES} ${RT_LIBRARIES} ${DL_LIBRARIES} -lpthread ${HEAPTRACK_LIBRARY})
 
 if(TARGET torkeccak)
     target_link_libraries(shadow-plugin-tor torkeccak)

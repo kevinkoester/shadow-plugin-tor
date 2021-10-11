@@ -39,6 +39,8 @@ endif()
 add_cflags(-ggdb)
 add_cflags(-fno-omit-frame-pointer)
 
+option(USE_HEAPTRACK "Enable the use of heaptrack (impacts performance)" OFF)
+
 ## get general includes
 include(CheckIncludeFile)
 include(CheckFunctionExists)
