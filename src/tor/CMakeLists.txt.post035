@@ -161,9 +161,14 @@ endforeach()
 
 ## create and install a shared library that can plug into shadow
 add_shadow_plugin(shadow-plugin-tor shadowtor-main.c ${all_src})
+add_executable(shadow-plugin-exe shadowtor-main.c ${all_src})
+target_link_libraries(shadow-plugin-exe
+    ${TOR_LIBRARIES} ${GLIB_LIBRARIES} ${EVENT2_LIBRARIES} ${OPENSSL_LIBRARIES} 
+    ${LIBLZMA_LIBRARIES} ${ZLIB_LIBRARIES} ${M_LIBRARIES} ${RT_LIBRARIES} ${DL_LIBRARIES} -lpthread ${HEAPTRACK_LIBRARY})
 
 if(TARGET torkeccak)
     add_dependencies(shadow-plugin-tor torkeccak)
+    add_dependencies(shadow-plugin-exe torkeccak)
 endif()
 
 target_link_libraries(shadow-plugin-tor
@@ -172,6 +177,7 @@ target_link_libraries(shadow-plugin-tor
 
 if(TARGET torkeccak)
     target_link_libraries(shadow-plugin-tor torkeccak)
+    target_link_libraries(shadow-plugin-exe torkeccak)
 endif()
 
 foreach(lib ${CMAKE_TOR_LIBRARIES})
