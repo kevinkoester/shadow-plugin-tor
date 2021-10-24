@@ -309,7 +309,7 @@ def build(args):
     if args.export_libraries: cmake_cmd += " -DSHADOW_EXPORT=ON"
     if args.enable_evpcipher: cmake_cmd += " -DSHADOW_ENABLE_EVPCIPHER=ON"
     if args.do_tor_tracing: cmake_cmd += " -DTOR_TRACING=ON"
-    if args.shadow_root is not None: cmake_cmd += "-DSHADOW_ROOT={}".format(args.shadow_root)
+    if args.shadow_root is not None: cmake_cmd += " -DSHADOW_ROOT={}".format(args.shadow_root)
 
     # we will run from build directory
     calledDirectory = os.getcwd()
