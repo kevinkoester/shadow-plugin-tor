@@ -192,6 +192,12 @@ def main():
         action="store_true", dest="enable_evpcipher",
         default=False)
 
+    parser_build.add_argument('--shadow-root',
+        help="Shadow installation rot",
+        metavar="PATH",
+        action="store", dest="shadow_root",
+        default=None)
+
     # configure install subcommand
     parser_install = subparsers_main.add_parser('install', help='install Shadow',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -303,6 +309,7 @@ def build(args):
     if args.export_libraries: cmake_cmd += " -DSHADOW_EXPORT=ON"
     if args.enable_evpcipher: cmake_cmd += " -DSHADOW_ENABLE_EVPCIPHER=ON"
     if args.do_tor_tracing: cmake_cmd += " -DTOR_TRACING=ON"
+    if args.shadow_root is not None: cmake_cmd += "-DSHADOW_ROOT={}".format(args.shadow_root)
 
     # we will run from build directory
     calledDirectory = os.getcwd()
