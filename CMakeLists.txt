@@ -40,6 +40,7 @@ add_cflags(-ggdb)
 add_cflags(-fno-omit-frame-pointer)
 
 option(USE_HEAPTRACK "Enable the use of heaptrack (impacts performance)" OFF)
+option(ENABLE_ENCRYPTION "Enable encryption. Uses more CPU time" OFF)
 
 ## get general includes
 include(CheckIncludeFile)

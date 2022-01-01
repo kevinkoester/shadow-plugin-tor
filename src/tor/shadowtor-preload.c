@@ -64,7 +64,7 @@ struct evdns_request* evdns_base_resolve_ipv4(struct evdns_base *base, const cha
 }
 
 /* openssl family */
-
+#ifndef USE_ENCRYPTION
 /* const AES_KEY *key
  * The key parameter has been voided to avoid requiring Openssl headers */
 void AES_encrypt(const unsigned char *in, unsigned char *out, const void *key) {
@@ -144,6 +144,7 @@ static void nop_add(const void* buf, int num, double entropy) {}
 int RAND_poll() {
     return 1;
 }
+#endif
 
 static int _shadowtorpreload_getRandomBytes(unsigned char* buf, int numBytes) {
     // shadow interposes this and will fill the buffer for us
